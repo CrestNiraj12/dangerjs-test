@@ -1,0 +1,22 @@
+name: "PR Checks"
+on: [pull_request]
+
+jobs:
+    build:
+        name: PR Checks
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Run Danger
+              run: |
+                  cd $HOME
+                  wget -O flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.10.2-stable.tar.xz
+                  tar xf flutter.tar.xz
+                  export PATH="${PATH}:$HOME/flutter/bin"
+                  cd $GITHUB_WORKSPACE
+                  flutter pub get
+                  npm install --global yarn
+                  yarn add danger --dev
+                  yarn danger ci
+              env:
+                  GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
