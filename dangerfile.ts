@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { danger, warn } from "danger";
 const child_process = require('child_process')
 
