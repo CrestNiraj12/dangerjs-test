@@ -10,7 +10,7 @@ function checkIsBodyEmpty() {
 function checkIsJiraLinkedInBody() {
     const body = danger.github.pr.body;
     
-    if (body.includes("https://wesionary-team.atlassian.net/")) {
+    if (!body.includes("https://wesionary-team.atlassian.net/")) {
         warn("Please add Jira ticket link to your PR.");
     }
 }
