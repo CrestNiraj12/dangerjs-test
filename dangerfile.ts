@@ -11,10 +11,10 @@ function checkIsBodyEmpty() {
 
 function checkIsJiraLinkedInBody() {
     const body = danger.github.pr.body;
+    const isJiraLinked = body.includes("https://wesionary-team.atlassian.net/");
     
-    if (body.includes("https://wesionary-team.atlassian.net/")) {
-        warn("Please add Jira ticket link to your PR.");
-    }
+    if (isJiraLinked) return;
+    warn("Please add Jira ticket link to your PR.");
 }
 
 function runDartFormat() {
