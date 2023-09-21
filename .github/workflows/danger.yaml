@@ -29,9 +29,6 @@ jobs:
           node-version: '16'
           cache: 'yarn'
 
-      - name: Cache Yarn dependencies
-        uses: c-hive/gha-yarn-cache@v2
-
       - name: Run Danger
         run: |
           cd $GITHUB_WORKSPACE
