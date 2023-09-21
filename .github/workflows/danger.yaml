@@ -2,34 +2,32 @@ name: "Flutter PR Checks"
 on: [pull_request]
 
 jobs:
-	build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
 
-        steps:
-			- uses: actions/checkout@v1
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v1
+        with:
+          path: /opt/hostedtoolcache/flutter
+          key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
 
-			- name: Cache Flutter dependencies
-			  uses: actions/cache@v1
-			  with:
-				path: /opt/hostedtoolcache/flutter
-				key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v2
+        with:
+          channel: stable
+          version: ${{ env.flutter_version }}
 
-			- name: Setup Flutter SDK
-			  uses: flutter-actions/setup-flutter@v2
-		      with:
-				channel: stable
-				version: ${{ env.flutter_version }}
+      - name: Install dependencies
+        run: flutter pub get
 
-			- name: Install dependencies
-			  run: flutter pub get
+      - uses: c-hive/gha-yarn-cache@v2
 
-			- uses: c-hive/gha-yarn-cache@v2
-
-			- name: Run Danger
-      		  run: |
-                  cd $GITHUB_WORKSPACE
-                  yarn add danger --dev
-                  yarn danger ci
-
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Danger
+        run: |
+          cd $GITHUB_WORKSPACE
+          yarn add danger --dev
+          yarn danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
