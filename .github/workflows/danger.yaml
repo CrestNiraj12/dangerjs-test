@@ -5,7 +5,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Cache Flutter dependencies
         uses: actions/cache@v1
@@ -15,14 +16,15 @@ jobs:
 
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
-  		with:
-		  flutter-version: '3.7.12'
-		  channel: 'stable'
+        with:
+          flutter-version: '3.7.12'
+          channel: 'stable'
 
       - name: Install dependencies
         run: flutter pub get
 
-      - uses: c-hive/gha-yarn-cache@v2
+      - name: Cache Yarn dependencies
+        uses: c-hive/gha-yarn-cache@v2
 
       - name: Run Danger
         run: |
