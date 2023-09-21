@@ -1,22 +1,35 @@
-name: "PR Checks"
+name: "Flutter PR Checks"
 on: [pull_request]
 
 jobs:
-    build:
-        name: PR Checks
+	build:
         runs-on: ubuntu-latest
+
         steps:
-            - uses: actions/checkout@v1
-            - name: Run Danger
-              run: |
-                  cd $HOME
-                  wget -O flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.10.2-stable.tar.xz
-                  tar xf flutter.tar.xz
-                  export PATH="${PATH}:$HOME/flutter/bin"
+			- uses: actions/checkout@v1
+
+			- name: Cache Flutter dependencies
+			  uses: actions/cache@v1
+			  with:
+				path: /opt/hostedtoolcache/flutter
+				key: ${{ runner.OS }}-flutter-install-cache-${{ env.flutter_version }}
+
+			- name: Setup Flutter SDK
+			  uses: flutter-actions/setup-flutter@v2
+		      with:
+				channel: stable
+				version: ${{ env.flutter_version }}
+
+			- name: Install dependencies
+			  run: flutter pub get
+
+			- uses: c-hive/gha-yarn-cache@v2
+
+			- name: Run Danger
+      		  run: |
                   cd $GITHUB_WORKSPACE
-                  flutter pub get
-                  npm install --global yarn
                   yarn add danger --dev
                   yarn danger ci
+
               env:
-                  GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
