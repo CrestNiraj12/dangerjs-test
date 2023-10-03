@@ -4,9 +4,8 @@ import { danger, warn } from "danger";
 const child_process = require('child_process')
 
 function checkIsBodyEmpty() {
-    if (danger.github.pr.body == "") {
-        warn("Please add a description to your PR.");
-    }
+    if (danger.github.pr.body != "") return;
+    warn("Please add a description to your PR.");
 }
 
 function checkIsJiraLinkedInBody() {
@@ -27,9 +26,8 @@ function runDartFormat() {
 
 function checkPRChangeSize() {
     const changedLinesOfCode = danger.github.pr.additions + danger.github.pr.deletions;
-    if (changedLinesOfCode > maxLinesOfCode) {
-        warn(`This PR changes too many lines of code i.e, ${changedLinesOfCode} lines.`);
-    }
+    if (changedLinesOfCode <= maxLinesOfCode) return;
+    warn(`This PR changes too many lines of code i.e, ${changedLinesOfCode} lines.`);
 }
 
 function runFlutterAnalyzer() {
