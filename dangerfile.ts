@@ -4,17 +4,16 @@ import { danger, warn } from "danger";
 const child_process = require('child_process')
 
 function checkIsBodyEmpty() {
-    if (danger.github.pr.body == "") {
-        warn("Please add a description to your PR.");
-    }
+    if (danger.github.pr.body != "") return;
+    warn("Please add a description to your PR.");
 }
 
 function checkIsJiraLinkedInBody() {
     const body = danger.github.pr.body;
+    const isJiraLinked = body.includes("https://wesionary-team.atlassian.net/");
     
-    if (body.includes("https://wesionary-team.atlassian.net/")) {
-        warn("Please add Jira ticket link to your PR.");
-    }
+    if (isJiraLinked) return;
+    warn("Please add Jira ticket link to your PR.");
 }
 
 function runDartFormat() {
@@ -28,9 +27,8 @@ function runDartFormat() {
 function checkPRChangeSize() {
     const maxLinesOfCode = 1000;
     const changedLinesOfCode = danger.github.pr.additions + danger.github.pr.deletions;
-    if (changedLinesOfCode > maxLinesOfCode) {
-        warn(`This PR changes too many lines of code. It changes ${changedLinesOfCode} lines, but the maximum allowed is ${maxLinesOfCode} lines.`);
-    }
+    if (changedLinesOfCode <= maxLinesOfCode) return;
+    warn(`This PR changes too many lines of code i.e, ${changedLinesOfCode} lines.`);
 }
 
 function runFlutterAnalyzer() {
