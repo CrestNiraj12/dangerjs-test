@@ -26,10 +26,9 @@ function runDartFormat() {
 }
 
 function checkPRChangeSize() {
-    const maxLinesOfCode = 1000;
     const changedLinesOfCode = danger.github.pr.additions + danger.github.pr.deletions;
     if (changedLinesOfCode > maxLinesOfCode) {
-        warn(`This PR changes too many lines of code. It changes ${changedLinesOfCode} lines, but the maximum allowed is ${maxLinesOfCode} lines.`);
+        warn(`This PR changes too many lines of code i.e, ${changedLinesOfCode} lines.`);
     }
 }
 
