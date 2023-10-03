@@ -26,11 +26,16 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      
+      - name: Install danger dependency
+        run: yarn add danger --dev
+
       - name: Run Danger
-        run: |
-          npm install --global yarn
-          cd $GITHUB_WORKSPACE
-          yarn add danger --dev
-          yarn danger ci
+        run: yarn danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
