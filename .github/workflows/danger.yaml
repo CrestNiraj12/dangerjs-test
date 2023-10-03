@@ -32,8 +32,8 @@ jobs:
           node-version: '16'
           cache: 'yarn'
       
-      - name: Install danger dependency
-        run: yarn add danger --dev
+      - name: Install dependency
+        run: yarn
 
       - name: Run Danger
         run: yarn danger ci
